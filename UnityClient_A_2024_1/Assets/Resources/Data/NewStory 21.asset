@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43dc7f7432e20aa4d80815de4df1c7b6, type: 3}
-  m_Name: NewStory 2
+  m_Name: NewStory 21
   m_EditorClassIdentifier: 
-  storyNumber: 2
+  storyNumber: 0
   storyType: 0
   storyDone: 0
-  storyText: 22222222222222222222222222222222
+  storyText: 
   options:
   - optionText: "\uACF5\uACA9\uD55C\uB2E4"
     buttonText: 
