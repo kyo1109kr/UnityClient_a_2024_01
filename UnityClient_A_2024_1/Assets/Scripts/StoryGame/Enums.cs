@@ -44,7 +44,7 @@ using UnityEngine;
     {
         //체력과 정신력
         public int hpPoint;
-        public int spPointl;
+        public int spPoint;
 
         public int currentHpPoint;
         public int currentSpPoint;
