@@ -12,6 +12,7 @@ public class StorySystem : MonoBehaviour
 
     public enum TEXTSYSTEM
     {
+        NONE,
         DOING,
         SELECT,
         DONE
@@ -26,8 +27,8 @@ public class StorySystem : MonoBehaviour
 
     public Button[] buttonWay = new Button[3];   //선택지 버튼 추가
     public Text[] buttonWayText = new Text[3];  //선택지 버튼 Text
-    
 
+    public TEXTSYSTEM currentTextShow = TEXTSYSTEM.NONE;
 
 
 
@@ -46,9 +47,8 @@ public class StorySystem : MonoBehaviour
             int wayIndex = i;
             buttonWay[i].onClick.AddListener(() => OnWayClick(wayIndex));
         }
-
-        StroyModelinit();
-        StartCoroutine(ShowText());
+     
+        CoShowText();
     }
 
     public void StroyModelinit()
@@ -62,14 +62,54 @@ public class StorySystem : MonoBehaviour
         }
     }
 
-    public void OnWayClick(int index)
+    public void OnWayClick(int index)           //선택지버튼에 따른 함수 index는 버튼에 연결된 번호를 받아온다.
     {
 
+        if (currentTextShow == TEXTSYSTEM.DOING)
+            return;
+
+
+        bool CheckEventTypeNone = false; //기본으로 NONE일때는 무조건 성공이라고 판단하고 실패시에 다시 불리는것을 피하기 위해서 Bool 선언
+        StoryModel playStoryMoodel = currenStoryModel;
+
+        if(playStoryMoodel.options[index].eventCheck.eventType == StoryModel.EventCheck.EventType.NONE)
+        {
+            for (int i = 0; i < playStoryMoodel.options[index].eventCheck.suceessResult.Length; i++)
+            {
+                GameSystem.instance.ApplyChoice(currenStoryModel.options[index].eventCheck.suceessResult[i]);
+                CheckEventTypeNone = true;
+            }
+
+        }
     }
+    public void CoShowText()                //전체적인 스토리 모델 호출
+    {
+        StroyModelinit();                   //스토리 모델을 셋팅
+        ResetSHow();                        //창 화면을 초기화
+        StartCoroutine(ShowText());         //연출 진행
+    }
+
+
+
+
+    public void ResetSHow() //스토리 다 보여주고 초기화
+    {
+        textComponent.text = "";  //보여진 텍스트 빈칸
+
+        for(int i = 0; i < buttonWay.Length; i++)  //버튼들 다시 가리기
+        {
+            buttonWay[i].gameObject.SetActive(false);
+        }
+    }
+
+
+
 
 
     IEnumerator ShowText()                                      //코루틴 함수 사용
     {
+        currentTextShow = TEXTSYSTEM.DOING;
+
         if(currenStoryModel.Mainlmage !=null)
         {
             //Texture2D를 Sprtie 변환
@@ -102,6 +142,8 @@ public class StorySystem : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
+
+        currentTextShow = TEXTSYSTEM.NONE;
     }
 
 }
